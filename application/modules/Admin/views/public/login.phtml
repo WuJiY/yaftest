@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>DevOOPS</title>
+    <meta name="description" content="description">
+    <meta name="author" content="Evgeniya">
+    <meta name="keyword" content="keywords">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/css/plugins/bootstrap/bootstrap.css" rel="stylesheet">
+    <link href="/css/font-awesome.css" rel="stylesheet">
+    <link href='/css/google.api.css' rel='stylesheet' type='text/css'>
+    <link href="/css/style_v1.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="http://getbootstrap.com/docs-assets/js/html5shiv.js"></script>
+    <script src="http://getbootstrap.com/docs-assets/js/respond.min.js"></script>
+    <![endif]-->
+    <script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div id="page-login" class="row">
+        <div class="col-xs-12 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+            <div class="box">
+                <div class="box-content">
+                    <div class="text-center">
+                        <h3 class="page-header">后台管理系统</h3>
+                    </div>
+                    <div>
+                        <div id="show" class="label-info" style="padding: 5px;">切勿让他人知道您的用户密码！</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">用户名</label>
+                        <input type="text" class="form-control" name="username"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">密码</label>
+                        <input type="password" class="form-control" name="password"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">验证码</label><br>
+                        <label style="width: 100%;">
+                            <input type="text" class="form-control" style="width: 70%;float: left" name="validate"/>
+                            <img src="/public/varify" style="float: right" id="validate" onclick="changeValidate();">
+                        </label>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-primary" id="sub">登陆</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script style="text/javascript">
+    $(function () {
+        $("#sub").click(function () {
+            var _username = $("input[name='username'").val();
+            var _password = $("input[name='password']").val();
+            var _validate = $("input[name='validate']").val();
+            if (_username == '' || _password == '' || _validate == '') {
+                $("#show").html("请填写完整数据！");
+                $("#show").removeClass("label-info");
+                $("#show").addClass("label-danger");
+                changeValidate();
+                return false;
+            }
+            $.ajax({
+                "url": "/Admin/Public/checklogin",
+                "type": "POST",
+                "data": {"username": _username, "password": _password, "validate": _validate},
+                "dataType": "json",
+                "success": function (request) {
+                    if (request.return_status == 100) {
+                        $("#show").html(request.msg);
+                        $("#show").removeClass("laber-info")
+                        $("#show").addClass("laber-danger");
+                        changeValidate();
+                    } else if (request.return_status == 200) {
+                        window.location.href = "/Admin/"
+                    }
+                }
+            })
+        })
+    })
+
+    function changeValidate() {
+        $("#validate").attr("src", "/public/varify/?" + Math.random());
+    }
+</script>
+</body>
+</html>
