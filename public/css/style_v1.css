@@ -2253,6 +2253,13 @@ ul.DTTT_dropdown.dropdown-menu > li:hover > a {
 .qq-upload-file, .qq-upload-size, .qq-upload-status-text {
     display: block;
 }
+@font-face {
+    font-family: 'Righteous';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Righteous'), local('Righteous-Regular'), url(http://fonts.gstatic.com/s/righteous/v5/w5P-SI7QJQSDqB3GziL8XVtXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
+}
+
 
 .qq-dropped-zone {
     position: absolute;
