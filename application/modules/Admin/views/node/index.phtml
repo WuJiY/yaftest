@@ -1,4 +1,6 @@
 <?php include __DIR__ . "/../public/header.phtml"; ?>
+<script src="/js/admin.js"></script>
+<a class="btn btn-success" href="/admin/node/add"> 添加节点</a>
 <div class="table-responsive">
     <table class="table table-bordered table-striped">
         <thead>
@@ -17,12 +19,17 @@
             <tr>
                 <th><?php echo $v1['node_name'] ?></th>
                 <th><?php echo $v1['node_ename'] ?></th>
-                <th><?php echo $v1['status'] ?></th>
+                <th><?php echo ($v1['status'] == NodeModel::STATUS_ENABLE) ? '启用' : '禁用'; ?></th>
                 <th><?php echo $v1['create_time'] ?></th>
                 <th><?php echo $v1['update_time'] ?></th>
                 <th>
-                    <button onclick="ajax_sub('/admin/node/edit/',)"> 修改</button>
-                    <button onclick="ajax_sub('/admin/node/del')">删除</button>
+                    <a href="/admin/node/add/id/<?php echo $v1['id']; ?>">修改</a>
+                    <a onclick="ajax_sub('/admin/node/able',{'id':<?php echo $v1['id']; ?>,
+                        'able':<?php echo ($v1['status'] == NodeModel::STATUS_ENABLE) ?
+                        NodeModel::STATUS_DISABLE : NodeModel::STATUS_ENABLE; ?>
+                        })">
+                        <?php echo ($v1['status'] == NodeModel::STATUS_ENABLE) ? '禁用' : '启用'; ?>
+                    </a>
                 </th>
             </tr>
         <?php } ?>

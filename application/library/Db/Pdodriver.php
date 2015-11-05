@@ -93,6 +93,26 @@ class Db_Pdodriver extends Db_Driver
     }
 
     /**
+     * 新增数据
+     * @param $params
+     */
+    public function insert($tbName, $params)
+    {
+        if (is_array($params) && !empty($params)) {
+            $tmp = array();
+            $key = $val = '';
+            foreach ($params as $k1 => $v1) {
+                $key .= "`" . $k1 . "`,";
+                $val .= "?,";
+                $tmp[] = $v1;
+            }
+            $sql = "insert into " . $tbName . "(" . $key . ") values (" . $val . ")";
+            $this->exec();
+        }
+        return false;
+    }
+
+    /**
      *  执行sql查询语句
      * @param $sql
      * @param null $bindVlaue array(array(":id",123, 'int'), array(":name", "zhangsan", 'string'));
@@ -125,20 +145,10 @@ class Db_Pdodriver extends Db_Driver
      */
     public function bindVal($params)
     {
-        $types = array('int' => PDO::PARAM_INT, 'string' => PDO::PARAM_STR, 'bool' => PDO::PARAM_BOOL);
-
-        foreach ($params as $v1) {
-            if (count($v1) != 3) {
-                $this->errorinfo = "参数无效！";
-                return false;
-            }
-            $type = array_pop($v1);
-            if ($type == 'int' || $type == 'string' || $type == 'bool') {
-                if (false == $this->sth->bindValue(array_shift($v1), array_shift($v1), $types[$type])) {
-                    return false;
-                }
-            } else {
-                $this->errorinfo = "参数格式不正确！";
+        $offset = 1;
+        while (!empty($params)) {
+            $val = array_shift($params);
+            if (!$this->sth->bindValue($offset++, $val)) {
                 return false;
             }
         }

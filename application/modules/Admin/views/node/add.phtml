@@ -1,0 +1,108 @@
+<?php include __DIR__ . "/../public/header.phtml"; ?>
+<script src="/js/admin.js"></script>
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="box">
+            <div class="box-content">
+                <h4 class="page-header">新增节点</h4>
+
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">节点英文名称<code>*</code>：</label>
+
+                        <div class="col-sm-4">
+                            <input type="text"
+                                   value="<?php if (isset($nodeRow['node_ename'])) echo $nodeRow['node_ename']; ?>"
+                                   class="form-control" name="ename" placeholder="node englist name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">节点中文名称<code>*</code>：</label>
+
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="zname" placeholder="node chinese name"
+                                   value="<?php if (isset($nodeRow['node_name'])) echo $nodeRow['node_name']; ?>"
+                                   data-toggle="tooltip"
+                                   data-placement="bottom" title="Tooltip for name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">节点状态：</label>
+
+                        <div class="col-sm-5">
+                            <select class="populate placeholder" name="status" id="status">
+                                <?php foreach (NodeModel::$STATUS_MAP as $k1 => $v1) { ?>
+                                    <option <?php
+                                    if ($nodeRow['status'] == $k1) ?>
+                                        selected="selected"
+                                        value="<?php echo $k1; ?>"><?php echo $v1; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-sm-2 control-label">节点所属：</label>
+
+                        <div class="col-sm-8">
+                            <?php foreach ($node as $v1) { ?>
+                                <div class="radio-inline">
+                                    <label>
+                                        <input type="radio" name="belong"
+                                            <?php
+                                            if ($nodeRow['pid'] == $v1['id'])
+                                            ?>
+                                               checked
+                                               value="<?php echo $v1['id'] ?>"><?php echo $v1['node_name'] ?>
+                                        <i class="fa fa-circle-o"></i>
+                                    </label>
+                                </div>
+                                <?php
+                                if ($v1['childen']) { ?>
+                                    <div></div>
+                                    <?php foreach ($v1['childen'] as $v2) { ?>
+                                        <div class="radio-inline">
+                                            <label>
+                                                <input type="radio" name="belong"
+                                                       value="<?php echo $v2['id'] ?>"><?php echo $v2['node_name'] ?>
+                                                <i class="fa fa-circle-o"></i>
+                                            </label>
+                                        </div>
+                                    <?php } ?>
+                                    <div></div>
+
+                                <?php }
+                            } ?>
+                        </div>
+                    </div>
+                    <input type="hidden" name="id" value="<?php echo (empty($id)) ? 0 : $id; ?>">
+
+                    <div class="form-group">
+                        <div class="btn btn-success center-block" id="sub" style="margin-left: 20%;">提交</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#sub").click(function () {
+        var _ename = $("input[name='ename']").val();
+        var _zname = $("input[name='zname']").val();
+        var _belong = $("input[name='belong']:checked").val();
+        var _id = $("input[name='id'").val();
+        var _status = $("#status").val();
+        if (_ename == '' || _zname == '' || isNaN(_belong)) {
+            alert("必须填写完毕");
+            return false;
+        }
+        ajax_sub("/admin/node/insert", {
+            "ename": _ename,
+            "zname": _zname,
+            "status": _status,
+            'pid': _belong,
+            'id': _id
+        });
+    });
+</script>
+<?php include __DIR__ . "/../public/footer.phtml"; ?>
+

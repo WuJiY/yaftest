@@ -7,12 +7,14 @@ function ajax_sub(url, data) {
         "url": url,
         "type": "post",
         "dataType": "json",
+        "data": data,
         success: function (response) {
             if (response.error == 100) {
                 alert(response.msg);
                 return false;
             } else {
                 alert(response.msg);
+                window.location.reload();
             }
         }
     });

@@ -9,7 +9,8 @@ class IndexController extends Base_IndexController
 
     public function indexAction()
     {
-        phpinfo();
+
+        throw new \Exception('ok');
         die;
         echo '前台';
     }
@@ -58,9 +59,22 @@ class IndexController extends Base_IndexController
         $use_obj->getAll();
         Yaf_Dispatcher::getInstance()->disableView();
     }
+
     public function infoAction()
     {
         phpinfo();
+        die;
+    }
+
+    public function getLinuxAction()
+    {
+        try {
+            $host = 'ftp1.linuxidc.com';
+            $ftp = new Lib_Ftp($host);
+            $ftp->getList('ftp1.linuxidc.com', 'www.linuxidc.com');
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
         die;
     }
 }
