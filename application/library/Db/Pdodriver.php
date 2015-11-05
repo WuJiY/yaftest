@@ -92,25 +92,7 @@ class Db_Pdodriver extends Db_Driver
         return $this->sth->rowCount();
     }
 
-    /**
-     * 新增数据
-     * @param $params
-     */
-    public function insert($tbName, $params)
-    {
-        if (is_array($params) && !empty($params)) {
-            $tmp = array();
-            $key = $val = '';
-            foreach ($params as $k1 => $v1) {
-                $key .= "`" . $k1 . "`,";
-                $val .= "?,";
-                $tmp[] = $v1;
-            }
-            $sql = "insert into " . $tbName . "(" . $key . ") values (" . $val . ")";
-            $this->exec();
-        }
-        return false;
-    }
+
 
     /**
      *  执行sql查询语句

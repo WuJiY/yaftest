@@ -17,23 +17,6 @@ class NodeModel extends Db_Basedb
         self::STATUS_DISABLE => '禁用'
     );
 
-    public function insert($params)
-    {
-        $this->db->insert($this->table_name, $params);
-//        if (empty($params))
-//            return false;
-//        $tmp = array();
-//        $key = $val = '';
-//        foreach ($params as $k1 => $v1) {
-//            $key .= "`" . $k1 . "`,";
-//            $val .= "?,";
-//            $tmp[] = $v1;
-//        }
-//        $sql = "insert into " . $this->table_name . " (" . rtrim($key, ',') . ") values (" . rtrim($val, ',') . ")";
-//        return $this->db->exec($sql, $tmp);
-    }
-
-
 
     public function getAll()
     {

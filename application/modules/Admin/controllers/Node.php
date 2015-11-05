@@ -56,62 +56,44 @@ class NodeController extends Base_AdminController
         try {
             // 更新
             if (intval($id = $this->getRequest()->getPost('id')) > 0) {
-                echo '1';
                 if (empty($param['node_ename'] = $this->getRequest()->getPost('ename'))) {
                     throw new \Exception("英文名必须填写");
                 }
-                echo '2';
                 if (empty($param['node_name'] = $this->getRequest()->getPost('zname'))) {
                     throw new \Exception("中文名必须填写");
                 }
-                echo '3';
-                var_dump($this->getRequest()->getPost('belong'));die;
-                if (empty($param['pid'] = $this->getRequest()->getPost('belong'))) {
+                if (empty($param['pid'] = $this->getRequest()->getPost('pid'))) {
                     throw new \Exception("请选择所属节点");
                 }
-                echo '4';
                 if (empty($param['status'] = $this->getRequest()->getPost('status'))) {
                     throw new \Exception("请选择所属节点");
                 }
-                echo '5';
                 if ($param['pid'] == $id) {
                     throw new \Exception("节点添加错误");
                 }
-                echo '6';
                 $param['update_time'] = date("Y-m-d H:i:s");
                 $nodeObj = new NodeModel();
                 $nodeObj->updateById($id, $param);
             } else {
-                // insert
-                if (empty($ename = $this->getRequest()->getPost('ename'))) {
+                if (empty($param['node_ename'] = $this->getRequest()->getPost('ename'))) {
                     throw new \Exception("英文名必须填写");
                 }
-                if (empty($zname = $this->getRequest()->getPost('zname'))) {
+                if (empty($param['node_name'] = $this->getRequest()->getPost('zname'))) {
                     throw new \Exception("中文名必须填写");
                 }
-                if (empty($pid = $this->getRequest()->getPost('belong'))) {
+                if (empty($param['pid'] = $this->getRequest()->getPost('pid'))) {
                     throw new \Exception("请选择所属节点");
                 }
+                $param['status'] = $this->getRequest()->getPost('status');
+                $param['create_time'] = date("Y-m-d H:i:s");
+                $param['update_time'] = date("Y-m-d H:i:s");
                 $nodeObj = new NodeModel();
-                $nodeObj->insert();
+                var_dump($nodeObj->insert($param));
+                die;
 
             }
         } catch (\Exception $e) {
             echo json_encode(array("error" => 100, 'msg' => $e->getMessage()));
         }
-    }
-
-
-    function nodeTree($items)
-    {
-        $tree = array();
-        foreach ($items as $item) {
-            if (isset($items[$item['pid']])) {
-                $items[$item['pid']]['childen'][] = &$items[$item['id']];
-            } else {
-                $tree[] = &$items[$item['id']];
-            }
-        }
-        return $tree;
     }
 }

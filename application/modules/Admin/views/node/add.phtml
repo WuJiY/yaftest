@@ -33,7 +33,7 @@
                             <select class="populate placeholder" name="status" id="status">
                                 <?php foreach (NodeModel::$STATUS_MAP as $k1 => $v1) { ?>
                                     <option <?php
-                                    if ($nodeRow['status'] == $k1) ?>
+                                    if (isset($nodeRow['status']) && $nodeRow['status'] == $k1) ?>
                                         selected="selected"
                                         value="<?php echo $k1; ?>"><?php echo $v1; ?></option>
                                 <?php } ?>
@@ -49,7 +49,7 @@
                                     <label>
                                         <input type="radio" name="belong"
                                             <?php
-                                            if ($nodeRow['pid'] == $v1['id'])
+                                            if (isset($nodeRow['pid']) && $nodeRow['pid'] == $v1['id'])
                                             ?>
                                                checked
                                                value="<?php echo $v1['id'] ?>"><?php echo $v1['node_name'] ?>
