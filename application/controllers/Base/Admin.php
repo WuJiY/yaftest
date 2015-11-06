@@ -5,8 +5,6 @@ class Base_AdminController extends Yaf_Controller_Abstract
     public function init()
     {
         $this->getMenu();
-        Yaf_Controller_Abstract::getModuleName();
-        die;
 //        if (!Lib_Session::getInstance()->__get("uid")) {
 //            $this->redirect("/Admin/public/login");
 //        }
@@ -15,29 +13,26 @@ class Base_AdminController extends Yaf_Controller_Abstract
     public function getMenu()
     {
         $nodeObj = new NodeModel();
-        $all_node = $nodeObj->getAll();
-        array_unshift($all_node, array(0));
-        unset($all_node[0]);
-        foreach ($this->nodeTree($all_node) as $value) {
-            var_dump($value);die;
+        $nodeTree = $this->nodeTree($nodeObj->getAll());
+        foreach ($nodeTree as $value) {
             if ($value['node_ename'] == Yaf_Controller_Abstract::getModuleName()) {
-//                $this->getView()->assign("menuList", $value['chi']);
+                $this->getView()->assign("menuList", $value['childen']);
                 break;
             }
         }
     }
-
-    function nodeTree($items)
+    function nodeTree($node, $access = null, $pid = 0)
     {
-        $tree = array();
-        foreach ($items as $item) {
-            if (isset($items[$item['pid']])) {
-                $items[$item['pid']]['childen'][] = &$items[$item['id']];
-            } else {
-                $tree[] = &$items[$item['id']];
+        $arr = array();
+        foreach ($node as $v) {
+            if (is_array($access)) {
+                $v['access'] = in_array($v['id'], $access) ? 1 : 0;
+            }
+            if ($v['pid'] == $pid) {
+                $v['childen'] = $this->nodeTree($node, $access, $v['id']);
+                $arr[] = $v;
             }
         }
-        return $tree;
+        return $arr;
     }
-
 }

@@ -17,10 +17,9 @@ class NodeModel extends Db_Basedb
         self::STATUS_DISABLE => '禁用'
     );
 
-
     public function getAll()
     {
-        $sql = "select * from node";
+        $sql = "select * from node order by `sort` asc";
         return $this->db->query($sql);
     }
 

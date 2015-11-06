@@ -4,9 +4,25 @@
         <div id="sidebar-left" class="col-xs-2 col-sm-2">
             <ul class="nav main-menu">
                 <?php
-                foreach ($menuList as $k => $v) :
-
-                endforeach;
+                if (isset($menuList) && !empty($menuList)):
+                    foreach ($menuList as $k1 => $v1) :?>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle">
+                                <i class="fa"></i>
+                                <span class="hidden-xs"><?php echo $v1['node_name']; ?></span>
+                            </a>
+                            <?php if (isset($v1['childen']) && !empty($v1['childen'])) : ?>
+                                <ul class="dropdown-menu">
+                                    <?php foreach ($v1['childen'] as $v2) : ?>
+                                        <li><a class="ajax-link"
+                                               href="/admin/<?php echo $v1['node_ename'] . '/' . $v2['node_ename']; ?>"><?php echo $v2['node_name']; ?></a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php endif; ?>
+                        </li>
+                    <?php endforeach;
+                endif;
                 ?>
                 <li>
                     <a href="/admin/index/index" class="ajax-link">
